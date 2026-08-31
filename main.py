@@ -10,6 +10,19 @@ from dotenv import load_dotenv
 # Loads the .env file and gets the discord token
 load_dotenv()
 discord_token = os.getenv("DISCORD_TOKEN")
+discord_server_id = os.getenv("DISCORD_SERVER_ID")
+discord_channel_id = os.getenv("DISCORD_CHANNEL_ID")
+discord_action_message_id = os.getenv("DISCORD_ACTION_MESSAGE_ID")
+
+required_settings = {
+    "DISCORD_TOKEN": discord_token,
+    "DISCORD_SERVER_ID": discord_server_id,
+    "DISCORD_CHANNEL_ID": discord_channel_id,
+    "DISCORD_ACTION_MESSAGE_ID": discord_action_message_id,
+}
+missing_settings = [name for name, value in required_settings.items() if not value]
+if missing_settings:
+    raise RuntimeError(f"Missing required environment variables: {', '.join(missing_settings)}")
 
 # Sets up the Selenium webdriver
 options = webdriver.ChromeOptions()
@@ -39,11 +52,11 @@ def discord_login():
 # Gets the code from the discord server
 def get_code():
     # Goes to the main channel in the server
-    driver.get("https://discord.com/channels/1136419235875258399/1136422264141774868")
+    driver.get(f"https://discord.com/channels/{discord_server_id}/{discord_channel_id}")
     time.sleep(4)
 
     # Presses the generate button
-    febxp('//*[@id="message-accessories-1169044279373611078"]/div[1]/div/div/button[1]').click()
+    febxp(f'//*[@id="message-accessories-{discord_action_message_id}"]/div[1]/div/div/button[1]').click()
     time.sleep(4)
 
     # Notes down the current time for the cooldown period
