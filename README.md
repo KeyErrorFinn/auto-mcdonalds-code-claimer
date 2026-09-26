@@ -1,53 +1,76 @@
 # Automatic McDonald's Code Claimer
 
-> [!WARNING]
-> This is an unfinished, unmaintained browser-automation experiment. It depends on old Discord and McDonald's page structures and should not be expected to work.
+<p align="center">
+  <img alt="Archived" src="https://img.shields.io/badge/status-archived-lightgrey" />
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" />
+  <img alt="Selenium" src="https://img.shields.io/badge/Selenium-43B02A?logo=selenium&logoColor=fff" />
+</p>
 
-The script opens Chrome with Selenium, attempts to retrieve a code from a specific Discord message interaction, and walks through a McDonald's feedback form using hard-coded selectors.
+> [!CAUTION]
+> This is an unfinished historical experiment. It relies on obsolete Discord and McDonald's page structures, injects a Discord token into browser storage, and should not be used with a real account.
 
-## Why it is fragile
+The script was intended to request a code from a specific Discord message interaction and then step through a McDonald's feedback form with Selenium.
 
-- Discord server, channel, and message identifiers are fixed through environment variables.
-- Discord and survey-site HTML selectors can change at any time.
-- Several form answers are selected randomly.
-- The script assumes a particular code and receipt format.
-- The repository contains an old `chromedriver.exe`, while modern Selenium may manage its own compatible driver.
+## Current state
 
-## Requirements
+The project is not production-ready:
 
-```bash
-python -m pip install -r requirements.txt
-```
+- Discord server, channel, and action-message IDs must be supplied manually.
+- Login depends on direct token injection.
+- Discord and survey selectors are hard-coded.
+- Receipt values are hard-coded into the generated survey URL.
+- Several answers are selected randomly.
+- The feedback loop still pauses for manual confirmation.
+- Final reward-code retrieval was never completed.
+- The included `chromedriver.exe` may not match an installed Chrome version.
 
-The pinned dependencies are Selenium 4.11.2 and python-dotenv 0.21.1.
+## Code flow
 
-## Configuration
+1. Load identifiers and a Discord token from `.env`.
+2. Start Chrome through Selenium.
+3. Inject the token and open the configured Discord channel.
+4. Click a specific message component.
+5. Read the first `code` element on the page.
+6. Open the feedback site and construct a URL from that value.
+7. Answer recognised page layouts until an unknown page is reached.
 
-Copy `.env.example` to `.env`:
+## Configuration reference
 
-```dotenv
+`.env.example` lists the values expected by the source:
+
+~~~dotenv
 DISCORD_TOKEN=
 DISCORD_SERVER_ID=
 DISCORD_CHANNEL_ID=
 DISCORD_ACTION_MESSAGE_ID=
-```
+~~~
 
-All four values are required by the script.
+Do not populate these values unless you are working in an authorised disposable test environment. Never commit the resulting `.env` file.
 
-## Security and account safety
+## Security concerns
 
-The implementation injects `DISCORD_TOKEN` into browser local storage. Do not use a personal/user account token: automating user accounts can violate Discord's rules and exposes full account access if the token leaks. Never commit `.env`, tokens, codes, or other account identifiers.
+- A Discord token provides account access and must be treated like a password.
+- Automating a normal user account can violate Discord's rules.
+- Randomly completing a feedback form can submit false information.
+- Hard-coded absolute XPath selectors can click the wrong control when a page changes.
 
-Only run automation against services and accounts where you have permission, and review the relevant service terms first.
+For code review, inspect `main.py` without supplying credentials or allowing it to submit forms.
 
-## Running for code review/testing
+## Files
 
-```bash
-python main.py
-```
+- `main.py`, the unfinished Selenium workflow.
+- `.env.example`, required variable names with blank values.
+- `chromedriver.exe`, an old bundled Chrome driver.
+- `requirements.txt`, Selenium and python-dotenv versions.
 
-Use a disposable, authorised test environment if examining the automation. The current project is best treated as historical source code rather than a production tool.
+## Historical setup
 
-## Current implementation
+~~~bash
+python -m pip install -r requirements.txt
+~~~
 
-The source contains functions for Discord login, requesting a code, opening the feedback site, selecting multiple-choice/satisfaction answers, and advancing through pages. Reliable final-code retrieval was not completed.
+The entry point is `python main.py`, but running it against live services is not recommended.
+
+## Licence
+
+No project-level licence is currently included.
