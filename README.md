@@ -1,45 +1,53 @@
-<h1 align="center">
-  Automatic Mcdonalds Code Claimer <br>
-  (NO LONGER MAINTAINED)
-</h1>
+# Automatic McDonald's Code Claimer
 
-<p align="center">
-  <a href="https://github.com/KeyErrorFinn/auto-mcdonalds-code-claimer/commits/main/"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/KeyErrorFinn/auto-mcdonalds-code-claimer" /></a>
-  <a href="https://github.com/KeyErrorFinn/auto-mcdonalds-code-claimer/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/KeyErrorFinn/auto-mcdonalds-code-claimer" /></a>
-</p>
-<p align="center">
-  <a href="#"><img alt="Python" src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" /></a>
-</p>
-
-This project is for getting mcdonalds codes from the <s>Bossman's Bargains discord server</s> and redeem them on the official mcdonalds page.
-
-## Table of Contents
-- [Table of Contents](#table-of-contents)
-- [About The Project](#about-the-project)
-  - [How the program works](#how-the-program-works)
-  - [TO-DO](#to-do)
-
-
-## About the Project
 > [!WARNING]
-> This project is not finished and has been put on hold. The server has not also been checked in a while so it could not work at all.
+> This is an unfinished, unmaintained browser-automation experiment. It depends on old Discord and McDonald's page structures and should not be expected to work.
 
-The python script uses selenium to retrieve the code from the <s>Bossman's Bargains discord server</s> and uses that code on the official mcdonalds page which returns a code that can be used in the mcdonalds app.
+The script opens Chrome with Selenium, attempts to retrieve a code from a specific Discord message interaction, and walks through a McDonald's feedback form using hard-coded selectors.
 
-### How the program works:
-1) Creates chrome window with selenium
-2) Goes to discord and logs in using a token
-3) Goes to the discord server channel and generates a code
-4) Gets the code and goes to the mcdonalds food-for-thought website
-5) uses the code to automatically input the information using the url parameters
-6) <s>Automatically Goes through all the pages and fills in the forms</s>
-7) <s>Finishes and retrieves the code</s>
+## Why it is fragile
 
-### TO-DO:
-- [x] <s>Start Program</s>
-- [x] <s>Gather Code</s>
-- [x] <s>Use the code on website</s>
-- [x] <s>Go through the form pages</s>
-- [ ] Try using a mobile view due to form errors
-- [ ] Retrieve final code from website
-- [ ] Look into automatically using the code for the app.
+- Discord server, channel, and message identifiers are fixed through environment variables.
+- Discord and survey-site HTML selectors can change at any time.
+- Several form answers are selected randomly.
+- The script assumes a particular code and receipt format.
+- The repository contains an old `chromedriver.exe`, while modern Selenium may manage its own compatible driver.
+
+## Requirements
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+The pinned dependencies are Selenium 4.11.2 and python-dotenv 0.21.1.
+
+## Configuration
+
+Copy `.env.example` to `.env`:
+
+```dotenv
+DISCORD_TOKEN=
+DISCORD_SERVER_ID=
+DISCORD_CHANNEL_ID=
+DISCORD_ACTION_MESSAGE_ID=
+```
+
+All four values are required by the script.
+
+## Security and account safety
+
+The implementation injects `DISCORD_TOKEN` into browser local storage. Do not use a personal/user account token: automating user accounts can violate Discord's rules and exposes full account access if the token leaks. Never commit `.env`, tokens, codes, or other account identifiers.
+
+Only run automation against services and accounts where you have permission, and review the relevant service terms first.
+
+## Running for code review/testing
+
+```bash
+python main.py
+```
+
+Use a disposable, authorised test environment if examining the automation. The current project is best treated as historical source code rather than a production tool.
+
+## Current implementation
+
+The source contains functions for Discord login, requesting a code, opening the feedback site, selecting multiple-choice/satisfaction answers, and advancing through pages. Reliable final-code retrieval was not completed.
