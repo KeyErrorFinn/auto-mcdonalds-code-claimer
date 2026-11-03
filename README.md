@@ -1,6 +1,10 @@
 # Automatic McDonald's Code Claimer
 
 <p align="center">
+  <img src="assets/logo.svg" alt="auto-mcdonalds-code-claimer logo" width="480" />
+</p>
+
+<p align="center">
   <img alt="Archived" src="https://img.shields.io/badge/status-archived-lightgrey" />
   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" />
   <img alt="Selenium" src="https://img.shields.io/badge/Selenium-43B02A?logo=selenium&logoColor=fff" />
